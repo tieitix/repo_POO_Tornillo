@@ -1,0 +1,83 @@
+@startuml
+class PlataformaVideojuegos {
+    - videojuegos: List<Videojuego>
+    - jugadores: List<Jugador>
+
+    - getInstancia(): PlataformaVideojuegos
+    + buscarVideoJuego(filtro: Filtro): List<Videojuego>
+    + registrarJugador(jugador: Jugador): void
+    - buscarJugador(int idJugador): void
+    - buscarVideoJuego(int idJVideojuego): void
+    - iniciarJuegoNuevo(int idJugador, int idVideoJuego): void
+    
+
+}
+
+abstract class Videojuego {
+    - idVideoJuego: int
+    - nombreJuego: String
+    - empresaDesarrolladora: String
+    - anioLanzamiento: int
+    - edadMinima: int
+    - genero: TipoJuego 
+    - precio: double 
+    + calcularRendimiento(): float
+
+    -validoEdadMinima(jugador Jugador): boolean
+}
+
+enum TipoJuego {
+ESTRATEGIA
+ACCION
+SIMULACION  
+}
+
+class JuegoEstrategia {
+- cantidadNiveles: int
++ calcularRendimiento(): float
+}
+
+class JuegoAccion {
+- cantidadEnemigos: int
++ calcularRendimiento(): float
+}
+
+class JuegoSimulacion {
++ calcularRendimiento(): float
+}
+
+class Jugador {
+    - idJugador: int
+    - nombre: String
+    - edad: int
+    - sesiones: List<SesionActiva>
+    + calcularRendimientoTotal(videojuego Videojuego): float
+
+    - menosDeDosSesionesActivas(SesionActiva sesionactiva): boolean
+}
+
+class SesionActiva {
+    - contadorSesiones: int
+    - tiempoTotal: float
+    - logrosCompletados: int
+    - finalizada: boolean
+    - dificultad: String
+    - juego: Videojuego
+    - jugador: Jugador
+    - getTipo: VideoJuego
+    - iniciarSesion():void
+    
+}
+
+Videojuego <|-- JuegoEstrategia
+Videojuego <|-- JuegoAccion
+Videojuego <|-- JuegoSimulacion
+Videojuego <-- TipoJuego
+Videojuego "0..*" o-- "1"   Jugador
+PlataformaVideojuegos "1" *-- "0..*" Jugador
+PlataformaVideojuegos "1" *-- "0..*" Videojuego 
+PlataformaVideojuegos "1" *-- "0..*" SesionActiva 
+Jugador "1" *-- "0..*" SesionActiva 
+
+
+@enduml

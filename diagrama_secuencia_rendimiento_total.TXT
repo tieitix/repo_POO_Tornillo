@@ -1,0 +1,32 @@
+@startuml
+actor Usuario
+
+Usuario -> PlataformaVideojuegos : calcularRendimientoTotal(idJugador)
+activate PlataformaVideojuegos
+
+PlataformaVideojuegos -> Jugador : buscarJugador(idJugador)
+activate Jugador
+Jugador -> SesionActiva : obtenerSesionesFinalizadas()
+activate SesionActiva
+
+loop por cada sesión finalizada
+    SesionActiva -> Videojuego : getTipo()
+    activate Videojuego
+    alt tipo == JuegoEstrategia
+        Videojuego -> JuegoEstrategia : calcularRendimiento()
+        activate JuegoEstrategia
+        JuegoEstrategia --> Videojuego : rendimiento: float
+        deactivate JuegoEstrategia    
+    end
+    deactivate Videojuego
+end
+SesionActiva --> Jugador : rendimientoJuego: float
+
+deactivate SesionActiva
+
+Jugador --> PlataformaVideojuegos : calcularRendimientoTotal: float
+deactivate Jugador
+
+PlataformaVideojuegos -> Usuario : mostrarRendimientoTotal()
+deactivate PlataformaVideojuegos
+@enduml

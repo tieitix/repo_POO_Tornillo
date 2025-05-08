@@ -1,0 +1,37 @@
+@startuml
+actor Usuario
+Usuario -> PlataformaVideojuegos : iniciarJuegoNuevo(idVideoJugador, idJuego)
+activate PlataformaVideojuegos
+
+PlataformaVideojuegos -> Jugador : buscarJugadorPorId(idJugador)
+activate Jugador
+Jugador --> PlataformaVideojuegos : Jugador
+deactivate Jugador
+PlataformaVideojuegos -> Videojuego : buscarVideojuegoPorId(idVideoJuego)
+activate Videojuego
+Videojuego --> PlataformaVideojuegos : Videojuego
+deactivate Videojuego
+
+PlataformaVideojuegos -> Jugador : menosDeDosSesionesActivas()
+activate Jugador
+Jugador --> PlataformaVideojuegos : boolean
+deactivate Jugador
+
+PlataformaVideojuegos -> Videojuego : validoEdadMinima(jugador)
+activate Videojuego
+Videojuego --> PlataformaVideojuegos : boolean
+deactivate Videojuego
+
+alt Puede iniciar
+    PlataformaVideojuegos -> SesionActiva : crearSesion(videojuego, jugador)
+    activate SesionActiva
+    SesionActiva -> Jugador : asociarSesion()
+    SesionActiva -> PlataformaVideojuegos : registrarSesion()
+    deactivate SesionActiva
+    PlataformaVideojuegos -> Usuario : confirmarInicio()
+else No puede iniciar
+    PlataformaVideojuegos -> Usuario : mostrarError("No cumple requisitos")
+end
+
+deactivate PlataformaVideojuegos
+@enduml
